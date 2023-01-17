@@ -1,0 +1,6 @@
+i.MX8ULP MICROGEA BOARD
+M:	Engicam <support@engicam.com>
+S:	Maintained
+F:	board/engicam/imx8ulp_microgea/
+F:	include/configs/imx8ulp_microgea.h
+F:	configs/imx8ulp_microgea_defconfig
