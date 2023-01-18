@@ -38,11 +38,6 @@
 		regulator-always-on;
 	};
 
-	usdhc2_pwrseq: usdhc2_pwrseq {
-		compatible = "mmc-pwrseq-simple";
-		reset-gpios = <&pcal6408 2 GPIO_ACTIVE_LOW>;
-	};
-
 };
 
 
@@ -60,7 +55,7 @@
 	phy-handle = <&ethphy>;
 	status = "okay";
 
-	phy-reset-gpios = <&pcal6408 4 GPIO_ACTIVE_LOW>;
+	phy-reset-gpios = <&gpioe 13 GPIO_ACTIVE_LOW>;
 
 	mdio {
 		#address-cells = <1>;
@@ -105,22 +100,6 @@
 	pcal6416: gpio@20 {
 		compatible = "ti,tca6416";
 		reg = <0x20>;
-		gpio-controller;
-		#gpio-cells = <2>;
-	};
-};
-
-&lpi2c7 {
-	#address-cells = <1>;
-	#size-cells = <0>;
-	clock-frequency = <100000>;
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_lpi2c7>;
-	status = "okay";
-
-	pcal6408: gpio@21 {
-		compatible = "ti,tca6408";
-		reg = <0x21>;
 		gpio-controller;
 		#gpio-cells = <2>;
 	};
@@ -177,28 +156,6 @@
 	status = "okay";
 };
 
-&usdhc2 {
-	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
-	pinctrl-0 = <&pinctrl_usdhc2_pte>;
-	pinctrl-1 = <&pinctrl_usdhc2_pte>;
-	pinctrl-2 = <&pinctrl_usdhc2_pte>;
-	pinctrl-3 = <&pinctrl_usdhc2_pte>;
-	mmc-pwrseq = <&usdhc2_pwrseq>;
-	max-frequency = <100000000>;
-	bus-width = <4>;
-	keep-power-in-suspend;
-	non-removable;
-	wakeup-source;
-	status = "disabled";
-
-	wifi_wake_host {
-		compatible = "nxp,wifi-wake-host";
-		interrupt-parent = <&gpioe>;
-		interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
-		interrupt-names = "host-wake";
-	};
-};
-
 &iomuxc1 {
 	pinctrl_dsi: dsigrp {
 		fsl,pins = <
@@ -212,13 +169,13 @@
 			MX8ULP_PAD_PTE14__ENET0_MDIO    0x43
 			MX8ULP_PAD_PTE17__ENET0_RXER    0x43
 			MX8ULP_PAD_PTE18__ENET0_CRS_DV  0x43
-			MX8ULP_PAD_PTF1__ENET0_RXD0     0x43
+			MX8ULP_PAD_PTE21__ENET0_RXD0    0x43
 			MX8ULP_PAD_PTE20__ENET0_RXD1    0x43
 			MX8ULP_PAD_PTE16__ENET0_TXEN    0x43
 			MX8ULP_PAD_PTE23__ENET0_TXD0    0x43
 			MX8ULP_PAD_PTE22__ENET0_TXD1    0x43
 			MX8ULP_PAD_PTE19__ENET0_REFCLK  0x43
-			MX8ULP_PAD_PTF10__ENET0_1588_CLKIN 0x43
+			MX8ULP_PAD_PTE13__PTE13			0x43
 		>;
 	};
 
@@ -243,13 +200,6 @@
 		fsl,pins = <
 			MX8ULP_PAD_PTE6__LPUART5_TX	0x3
 			MX8ULP_PAD_PTE7__LPUART5_RX	0x3
-		>;
-	};
-
-	pinctrl_lpi2c7: lpi2c7grp {
-		fsl,pins = <
-			MX8ULP_PAD_PTE12__LPI2C7_SCL	0x20
-			MX8ULP_PAD_PTE13__LPI2C7_SDA	0x20
 		>;
 	};
 
@@ -280,18 +230,6 @@
 			MX8ULP_PAD_PTD4__SDHC0_D6	0x3
 			MX8ULP_PAD_PTD3__SDHC0_D7	0x3
 			MX8ULP_PAD_PTD11__SDHC0_DQS	0x10002
-		>;
-	};
-
-	pinctrl_usdhc2_pte: usdhc2ptegrp {
-		fsl,pins = <
-			MX8ULP_PAD_PTE1__SDHC2_D0	0x3
-			MX8ULP_PAD_PTE0__SDHC2_D1	0x3
-			MX8ULP_PAD_PTE5__SDHC2_D2	0x3
-			MX8ULP_PAD_PTE4__SDHC2_D3	0x3
-			MX8ULP_PAD_PTE2__SDHC2_CLK	0x10002
-			MX8ULP_PAD_PTE3__SDHC2_CMD	0x3
-			MX8ULP_PAD_PTE7__PTE7		0x10003
 		>;
 	};
 
