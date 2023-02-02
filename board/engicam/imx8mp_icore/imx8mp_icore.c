@@ -198,6 +198,52 @@ int board_usb_init(int index, enum usb_init_type init)
 	return 0;
 }
 
+static iomux_v3_cfg_t const eqos_pads[] = {
+	MX8MP_PAD_ENET_RD3__GPIO1_IO29 | MUX_PAD_CTRL(0x1D1),
+	MX8MP_PAD_ENET_RX_CTL__GPIO1_IO24 | MUX_PAD_CTRL(0x1D1),
+	MX8MP_PAD_ENET_RD0__GPIO1_IO26 | MUX_PAD_CTRL(0x1D1),
+	MX8MP_PAD_ENET_RD1__GPIO1_IO27 | MUX_PAD_CTRL(0x1D1),
+};
+
+static iomux_v3_cfg_t const eqos_pads_orig[] = {
+	MX8MP_PAD_ENET_RD3__ENET_QOS_RGMII_RD3 | MUX_PAD_CTRL(0x1D1),
+	MX8MP_PAD_ENET_RX_CTL__ENET_QOS_RGMII_RX_CTL | MUX_PAD_CTRL(0x1D1),
+	MX8MP_PAD_ENET_RD0__ENET_QOS_RGMII_RD0 | MUX_PAD_CTRL(0x1D1),
+	MX8MP_PAD_ENET_RD1__ENET_QOS_RGMII_RD1 | MUX_PAD_CTRL(0x1D1),
+};
+
+
+#define RESET_EQOS_PHY IMX_GPIO_NR(3, 7)
+
+void reset_eqos(void)
+{
+	udelay(10000);
+		
+	imx_iomux_v3_setup_multiple_pads(eqos_pads, ARRAY_SIZE(eqos_pads));
+
+	gpio_request(IMX_GPIO_NR(1,24), "eqos_rx");
+	gpio_request(IMX_GPIO_NR(1,26), "eqos_rd0");
+	gpio_request(IMX_GPIO_NR(1,27), "eqos_rd1");
+
+	gpio_direction_output(IMX_GPIO_NR(1,24), 1);
+	gpio_direction_output(IMX_GPIO_NR(1,26), 1);
+	gpio_direction_output(IMX_GPIO_NR(1,27), 1);
+
+	udelay(10000);
+
+	gpio_request(RESET_EQOS_PHY, "eqos");
+	gpio_direction_output(RESET_EQOS_PHY, 0);
+
+	udelay(10000);
+
+	gpio_direction_output(RESET_EQOS_PHY, 1);
+
+	udelay(1000);
+
+	imx_iomux_v3_setup_multiple_pads(eqos_pads_orig, ARRAY_SIZE(eqos_pads_orig));
+}
+
+
 int board_usb_cleanup(int index, enum usb_init_type init)
 {
 	int ret = 0;
@@ -251,6 +297,7 @@ int board_init(void)
 {
 	struct arm_smccc_res res;
 
+	
 	if (CONFIG_IS_ENABLED(FEC_MXC)) {
 		setup_fec();
 	}
@@ -258,6 +305,9 @@ int board_init(void)
 	if (CONFIG_IS_ENABLED(DWC_ETH_QOS)) {
 		setup_eqos();
 	}
+	
+	reset_eqos();
+
 
 #ifdef CONFIG_NAND_MXS
 	setup_gpmi_nand();
