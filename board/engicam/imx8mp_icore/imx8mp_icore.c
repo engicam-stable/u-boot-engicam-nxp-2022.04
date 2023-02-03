@@ -213,7 +213,11 @@ static iomux_v3_cfg_t const eqos_pads_orig[] = {
 };
 
 
-#define RESET_EQOS_PHY IMX_GPIO_NR(3, 7)
+#ifdef CONFIG_TARGET_IMX8MP_ICORE_FASTETH
+	#define RESET_EQOS_PHY IMX_GPIO_NR(1, 29)
+#else
+	#define RESET_EQOS_PHY IMX_GPIO_NR(3, 7)
+#endif
 
 void reset_eqos(void)
 {
@@ -273,12 +277,26 @@ static int setup_eqos(void)
 	struct iomuxc_gpr_base_regs *gpr =
 		(struct iomuxc_gpr_base_regs *)IOMUXC_GPR_BASE_ADDR;
 
-	/* set INTF as RGMII, enable RGMII TXC clock */
-	clrsetbits_le32(&gpr->gpr[1],
-			IOMUXC_GPR_GPR1_GPR_ENET_QOS_INTF_SEL_MASK, BIT(16));
-	setbits_le32(&gpr->gpr[1], BIT(19) | BIT(21));
+	clrbits_le32(&gpr->gpr[1], BIT(20));
 
-	return set_clk_eqos(ENET_125MHZ);
+	/* Enable clk generate module for ENET QoS */
+	setbits_le32(&gpr->gpr[1], BIT(19) );
+	
+	#ifdef CONFIG_TARGET_IMX8MP_ICORE_FASTETH
+			/* set INTF as RMII  */
+		clrsetbits_le32(&gpr->gpr[1],
+				IOMUXC_GPR_GPR1_GPR_ENET_QOS_INTF_SEL_MASK , BIT(18));
+
+		return set_clk_eqos(ENET_50MHZ);
+	#else
+		/* set INTF as RGMII, enable RGMII TXC clock */
+		clrsetbits_le32(&gpr->gpr[1],
+				IOMUXC_GPR_GPR1_GPR_ENET_QOS_INTF_SEL_MASK, BIT(16));
+		setbits_le32(&gpr->gpr[1], BIT(19) | BIT(21));
+
+
+		return set_clk_eqos(ENET_125MHZ);
+	#endif
 }
 
 #if CONFIG_IS_ENABLED(NET)
