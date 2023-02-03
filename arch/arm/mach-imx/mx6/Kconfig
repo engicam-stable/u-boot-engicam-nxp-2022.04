@@ -634,6 +634,16 @@ config TARGET_MYS_6ULX
 	select DM_THERMAL
 	select SUPPORT_SPL
 
+config TARGET_MICROGEA_MX6ULL
+        bool "Support Engicam Microgea"
+        depends on MX6ULL
+        select BOARD_LATE_INIT
+        select DM
+        select DM_THERMAL
+        select IMX_MODULE_FUSE
+        select OF_SYSTEM_SETUP
+        imply CMD_DM
+
 config TARGET_NITROGEN6X
 	bool "nitrogen6x"
 	depends on MX6DL || MX6Q || MX6QDL || MX6S
