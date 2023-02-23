@@ -1,0 +1,76 @@
+// SPDX-License-Identifier: GPL-2.0 OR X11
+/*
+ * Copyright (C) 2016 Amarula Solutions B.V.
+ * Copyright (C) 2016 Engicam S.r.l.
+ */
+
+/dts-v1/;
+
+#include "imx6dl.dtsi"
+#include "imx6qdl-icore.dtsi"
+
+/ {
+	model = "Engicam i.CoreM6 DualLite Edimm 2.0 Starter Kit";
+	compatible = "engicam,imx6-icore", "fsl,imx6dl";
+};
+
+&can1 {
+	status = "okay";
+};
+
+&can2 {
+	status = "okay";
+};
+
+&i2c1 {
+	max11801: touchscreen@48 {
+		compatible = "maxim,max11801";
+		reg = <0x48>;
+		interrupt-parent = <&gpio3>;
+		interrupts = <31 IRQ_TYPE_EDGE_FALLING>;
+	};
+};
+
+&usdhc1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_usdhc1>, <&pinctrl_usdhc1_gpio>;
+	cd-gpio = <&gpio1 1 GPIO_ACTIVE_LOW>;
+	max-frequency = <50000000>;
+	bus-width = <1>;
+};
+
+&fec {
+	phy-handle = <&eth_phy>;
+
+	mdio {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		eth_phy: ethernet-phy@0 {
+			compatible = "ethernet-phy-ieee802.3-c22";
+			reg = <0>;
+			reset-gpios = <&gpio7 12 GPIO_ACTIVE_LOW>;
+			reset-assert-us = <4000>;
+			reset-deassert-us = <4000>;
+		};
+	};
+};
+
+&iomuxc {
+	pinctrl_usdhc1: usdhc1grp {
+		fsl,pins = <
+			MX6QDL_PAD_SD1_CMD__SD1_CMD    0x17070
+			MX6QDL_PAD_SD1_CLK__SD1_CLK    0x10070
+			MX6QDL_PAD_SD1_DAT0__SD1_DATA0 0x17070
+			MX6QDL_PAD_SD1_DAT1__SD1_DATA1 0x17070
+			MX6QDL_PAD_SD1_DAT2__SD1_DATA2 0x17070
+			MX6QDL_PAD_SD1_DAT3__SD1_DATA3 0x17070
+		>;
+	};
+
+	pinctrl_usdhc1_gpio: usdhc1gpiogrp {
+		fsl,pins = <
+			MX6QDL_PAD_GPIO_1__GPIO1_IO01  0x1b0b0
+		>;
+	};
+};

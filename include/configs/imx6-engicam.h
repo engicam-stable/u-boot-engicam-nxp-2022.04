@@ -13,6 +13,8 @@
 #include <linux/stringify.h>
 #include "mx6_common.h"
 
+#undef CONFIG_LDO_BYPASS_CHECK
+
 /* Total Size of Environment Sector */
 
 /* Environment */
