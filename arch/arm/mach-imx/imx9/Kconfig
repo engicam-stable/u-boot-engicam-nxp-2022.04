@@ -32,6 +32,10 @@ config TARGET_IMX93_11X11_EVK
 	bool "imx93_11x11_evk"
 	select IMX93
 
+config TARGET_IMX93_ICORE
+	bool "imx93_icore"
+	select IMX93	
+	
 config TARGET_IMX93_9X9_QSB
 	bool "imx93_9x9_qsb"
 	select IMX93
@@ -41,6 +45,7 @@ endchoice
 
 source "board/freescale/imx93_evk/Kconfig"
 source "board/freescale/imx93_qsb/Kconfig"
+source "board/engicam/imx93_icore/Kconfig"
 
 endif
 

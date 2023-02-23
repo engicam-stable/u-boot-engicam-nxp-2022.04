@@ -1,0 +1,21 @@
+if TARGET_IMX93_ICORE
+
+config SYS_BOARD
+	default "imx93_icore"
+
+config SYS_VENDOR
+	default "engicam"
+
+config SYS_CONFIG_NAME
+	default "imx93_icore"
+
+config IMX93_ICORE
+	bool "Using LPDDR4X Timing and PMIC voltage"
+	default y
+	select IMX9_LPDDR4X
+	help
+	  Select the LPDDR4X timing and 0.6V VDDQ
+
+source "board/freescale/common/Kconfig"
+
+endif
