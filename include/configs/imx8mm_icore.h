@@ -76,7 +76,7 @@
 	"initrd_addr=0x43800000\0"		\
 	"initrd_high=0xffffffffffffffff\0" \
 	"mmcdev="__stringify(CONFIG_SYS_MMC_ENV_DEV)"\0" \
-	"mmcpart="1"\0" \
+	"mmcpart=1\0" \
 	"mmcroot=" CONFIG_MMCROOT " rootwait rw\0" \
 	"mmcautodetect=yes\0" \
 	"mmcargs=setenv bootargs ${jh_clk} console=${console} root=${mmcroot}\0 " \
