@@ -138,7 +138,7 @@ config TARGET_IMX8MM_DDR4_AB2
 	select FSL_BLOB
 	select SPL_CRYPTO if SPL
 
-config TARGET_IMX8MM_ICORE_MX8MM
+config TARGET_IMX8MM_ICORE
 	bool "Engicam i.Core MX8M Mini SOM"
 	select IMX8MM
 	select SUPPORT_SPL
@@ -367,7 +367,6 @@ source "board/advantech/imx8mp_rsb3720a1/Kconfig"
 source "board/beacon/imx8mm/Kconfig"
 source "board/beacon/imx8mn/Kconfig"
 source "board/compulab/imx8mm-cl-iot-gate/Kconfig"
-source "board/engicam/imx8mm/Kconfig"
 source "board/freescale/imx8mq_evk/Kconfig"
 source "board/freescale/imx8mq_val/Kconfig"
 source "board/freescale/imx8mm_ab2/Kconfig"
@@ -387,5 +386,5 @@ source "board/variscite/imx8mn_var_som/Kconfig"
 source "board/toradex/verdin-imx8mm/Kconfig"
 source "board/toradex/verdin-imx8mp/Kconfig"
 source "board/engicam/imx8mp_icore/Kconfig"
-
+source "board/engicam/imx8mm_icore/Kconfig"
 endif

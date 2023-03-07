@@ -981,6 +981,7 @@ dtb-$(CONFIG_ARCH_IMX8M) += \
 	imx8mm-venice-gw7901.dtb \
 	imx8mm-venice-gw7902.dtb \
 	imx8mm-verdin.dtb \
+	imx8mm-icore.dtb \
 	phycore-imx8mm.dtb \
 	imx8mn-ddr3l-evk.dtb \
 	imx8mn-ddr4-evk.dtb \
@@ -1004,6 +1005,7 @@ dtb-$(CONFIG_ARCH_IMX8M) += \
 	imx8mp-verdin.dtb \
 	imx8mq-pico-pi.dtb \
 	imx8mq-kontron-pitx-imx8m.dtb
+	
 
 dtb-$(CONFIG_ARCH_IMX9) += \
 	imx93-11x11-evk.dtb \

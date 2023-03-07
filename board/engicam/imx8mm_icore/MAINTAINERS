@@ -1,0 +1,6 @@
+i.MX8MM EVK BOARD
+M:	Engicam Team <support@engicam.com>
+S:	Maintained
+F:	board/engicam/imx8mm_icore/
+F:	include/configs/imx8mm_icore.h
+F:	configs/imx8mm_icore_defconfig
