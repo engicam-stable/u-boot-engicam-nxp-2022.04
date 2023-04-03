@@ -260,7 +260,17 @@ config TARGET_IMX8MP_ICORE_FASTETH
 	select FSL_BLOB
 	select MISC
 	select SPL_CRYPTO_SUPPORT if SPL
-	
+
+config TARGET_IMX8MP_SMARCORE
+	bool "imx8mp smarcore Engicam module"
+	select IMX8MP
+	select SUPPORT_SPL
+	select IMX8M_LPDDR4
+	select FSL_CAAM
+	select FSL_BLOB
+	select MISC
+	select SPL_CRYPTO_SUPPORT if SPL
+
 config TARGET_IMX8MP_DDR4_EVK
 	bool "imx8mp DDR4 EVK board"
 	select IMX8MP
@@ -386,5 +396,6 @@ source "board/variscite/imx8mn_var_som/Kconfig"
 source "board/toradex/verdin-imx8mm/Kconfig"
 source "board/toradex/verdin-imx8mp/Kconfig"
 source "board/engicam/imx8mp_icore/Kconfig"
+source "board/engicam/imx8mp_smarcore/Kconfig"
 source "board/engicam/imx8mm_icore/Kconfig"
 endif

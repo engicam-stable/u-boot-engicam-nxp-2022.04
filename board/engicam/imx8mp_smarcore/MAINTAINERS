@@ -1,0 +1,6 @@
+i.MX8MP SMARCORE
+M:	Support <support@engicam.com>
+S:	Maintained
+F:	board/engicam/imx8mp_smarcore/
+F:	include/configs/imx8mp_smarcore.h
+F:	configs/imx8mp_smarcore_defconfig
