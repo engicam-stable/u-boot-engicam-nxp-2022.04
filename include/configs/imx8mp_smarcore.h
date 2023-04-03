@@ -42,14 +42,12 @@
 
 #define FEC_QUIRK_ENET_MAC
 
-#ifdef CONFIG_TARGET_IMX8MP_ICORE_FASTETH
-	#define CONFIG_FEC_XCV_TYPE             RMII
-	#define CONFIG_FEC_MXC_PHYADDR          0
-	#define DWC_NET_PHYADDR			0
-#else
-	#define CONFIG_FEC_XCV_TYPE             RGMII
-	#define CONFIG_FEC_MXC_PHYADDR          7
-	#define DWC_NET_PHYADDR			7
+#define CONFIG_FEC_XCV_TYPE             RGMII
+#define CONFIG_FEC_MXC_PHYADDR          7
+
+#define DWC_NET_PHYADDR			7
+#ifdef CONFIG_DWC_ETH_QOS
+#define CONFIG_SYS_NONCACHED_MEMORY     (1 * SZ_1M)     /* 1M */
 #endif
 
 #ifdef CONFIG_DWC_ETH_QOS
