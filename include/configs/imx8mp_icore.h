@@ -77,6 +77,13 @@
 #define MFG_NAND_PARTITION "mtdparts=gpmi-nand:64m(nandboot),16m(nandfit),32m(nandkernel),16m(nanddtb),8m(nandtee),-(nandrootfs)"
 #endif
 
+#ifdef CONFIG_IMX8MP_1GB_LPDDR4
+	#define CMA_VALUE " cma=128M "	
+#else	
+	#define CMA_VALUE " "
+#endif
+
+/* Initial environment variables */
 #define CONFIG_EXTRA_ENV_SETTINGS		\
 	BOOTENV \
 	"prepare_mcore=setenv mcore_clk clk-imx8mp.mcore_booted;\0" \
@@ -97,7 +104,7 @@
 	"mmcpart=1\0" \
 	"mmcroot=" CONFIG_MMCROOT " rootwait rw\0" \
 	"mmcautodetect=yes\0" \
-	"mmcargs=setenv bootargs ${jh_clk} ${mcore_clk} console=${console} root=${mmcroot}\0 " \
+	"mmcargs=setenv bootargs ${jh_clk} ${mcore_clk} console=${console} root=${mmcroot} " CMA_VALUE "\0 " \
 	"loadbootscript=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${bsp_script};\0" \
 	"bootscript=echo Running bootscript from mmc ...; " \
 		"source\0" \
@@ -160,7 +167,18 @@
 /* Totally 2GB DDR */
 #define CONFIG_SYS_SDRAM_BASE		0x40000000
 #define PHYS_SDRAM			0x40000000
-#define PHYS_SDRAM_SIZE			0x80000000	/* 2 GB */
+
+#ifdef CONFIG_IMX8MP_1GB_LPDDR4
+	/* Totally 1GB DDR */	
+	#define PHYS_SDRAM_SIZE			0x40000000	/* 1 GB */
+#elif defined(CONFIG_IMX8MP_4GB_LPDDR4)
+	#define PHYS_SDRAM_SIZE		0xC0000000	/* 3 GB */
+	#define PHYS_SDRAM_2		0x100000000
+	#define PHYS_SDRAM_2_SIZE	0x40000000	/* 1 GB */
+#else
+	/* Totally 2GB DDR */
+	#define PHYS_SDRAM_SIZE			0x80000000	/* 2 GB */
+#endif
 
 #define CONFIG_MXC_UART_BASE		UART2_BASE_ADDR
 

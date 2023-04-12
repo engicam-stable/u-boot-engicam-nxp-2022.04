@@ -5,11 +5,17 @@ config IMX8M_DRAM
 	bool "imx8m dram"
 	select IMX_SNPS_DDR_PHY
 
+config IMX8MP_1GB_LPDDR4
+	bool "imx8m 1GB lpddr4"
+
 config IMX8M_LPDDR4
 	bool "imx8m lpddr4"
 	select IMX8M_DRAM
 	help
 	  Select the i.MX8M LPDDR4 driver support on i.MX8M SOC.
+
+config IMX8MP_4GB_LPDDR4
+	bool "imx8m 4GB lpddr4"
 
 config IMX8M_DDR4
 	bool "imx8m ddr4"
