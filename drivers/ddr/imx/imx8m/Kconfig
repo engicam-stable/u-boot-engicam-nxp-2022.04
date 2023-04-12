@@ -8,6 +8,9 @@ config IMX8M_DRAM
 config IMX8MP_1GB_LPDDR4
 	bool "imx8m 1GB lpddr4"
 
+config IMX8M_2GB_LPDDR4
+	bool "imx8m 2GB LPDDR4"
+
 config IMX8M_LPDDR4
 	bool "imx8m lpddr4"
 	select IMX8M_DRAM
