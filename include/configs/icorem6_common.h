@@ -22,10 +22,6 @@
 #define CONFIG_INITRD_TAG
 #define CONFIG_REVISION_TAG
 
-#define CONFIG_IMX6_THERMAL
-
-#define CONFIG_SYS_GENERIC_BOARD
-
 /* Size of malloc() pool */
 #define CONFIG_SYS_MALLOC_LEN		(10 * SZ_1M)
 
@@ -37,7 +33,6 @@
 /* MMC Configs */
 #define CONFIG_SYS_FSL_ESDHC_ADDR      0
 
-#define CONFIG_GENERIC_MMC
 #define CONFIG_BOUNCE_BUFFER
 #define CONFIG_DOS_PARTITION
 
@@ -61,7 +56,7 @@
 #undef CONFIG_CMD_IMLS
 
 #define CONFIG_SYS_TEXT_BASE           0x17800000
-
+// 
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	EXTRA_ENV_SETTINGS_ICORE \
 	"fdt_high=0xffffffff\0"
@@ -70,17 +65,14 @@
 
 /* Miscellaneous configurable options */
 #define CONFIG_SYS_LONGHELP
-#define CONFIG_SYS_HUSH_PARSER
 #define CONFIG_SYS_PROMPT_HUSH_PS2     "> "
 #define CONFIG_AUTO_COMPLETE
 #define CONFIG_SYS_BARGSIZE CONFIG_SYS_CBSIZE
 
 #define CONFIG_SYS_MEMTEST_START       0x10000000
 #define CONFIG_SYS_MEMTEST_END         0x10010000
-#define CONFIG_SYS_MEMTEST_SCRATCH     0x10800000
 
 #define CONFIG_CMDLINE_EDITING
-#define CONFIG_STACKSIZE               (128 * 1024)
 
 /* Physical Memory Map */
 #define CONFIG_NR_DRAM_BANKS           1
@@ -102,11 +94,5 @@
 /*#define CONFIG_VIDEO_LOGO Abilitare per splashscreen UBOOT*/
 #define CONFIG_IMX_HDMI
 #define CONFIG_IMX_VIDEO_SKIP
-
-#ifndef CONFIG_SPL
-#define CONFIG_G_DNL_VENDOR_NUM		0x0525
-#define CONFIG_G_DNL_PRODUCT_NUM	0xa4a5
-#define CONFIG_G_DNL_MANUFACTURER	"FSL"
-#endif
 
 #endif                         /* __ICOREM6_COMMON_CONFIG_H */

@@ -30,11 +30,10 @@
 
 #define CONFIG_MACH_TYPE	3980
 #define CONFIG_MXC_UART_BASE	UART4_BASE
-#define CONFIG_CONSOLE_DEV		"ttymxc3"
+#define ENG_CONFIG_CONSOLE_DEV		"ttymxc3"
 
 /* Miscellaneous configurable options */
 #define CONFIG_SYS_LONGHELP
-#define CONFIG_SYS_HUSH_PARSER
 #define CONFIG_AUTO_COMPLETE
 
 #define CONFIG_SYS_BARGSIZE CONFIG_SYS_CBSIZE
@@ -50,14 +49,12 @@
 #endif
 
 #define CONFIG_SYS_FSL_USDHC_NUM	1
-#define CONFIG_STR_MMC_DEV "0"
 #define CONFIG_MMCROOT			"/dev/mmcblk0p2"
 
 /* NETWORK SETTINGS */
 #define CONFIG_SERVERIP		192.168.2.96
 #define CONFIG_IPADDR		192.168.2.75
 #define CONFIG_NETMASK		255.255.255.0
-#define CONFIG_ETHADDR		9C:53:CD:01:21:6A
 
 #define BOOTCMD_FROM_MMC \
   "bootargs_emmc=run bootargs_base; setenv bootargs ${bootargs_tmp} root=/dev/mmcblk${mmcdev}p2 rootwait rw\0" \
@@ -69,11 +66,11 @@
 #if defined(CONFIG_NAND_BOOT)
 	#undef BOOTCMD_FROM_MMC
 	#define BOOTCMD_FROM_MMC ""
-	#define CONFIG_BOOTCMD		"bootcmd=run bootcmd_ubi\0"
+	#define ENG_CONFIG_BOOTCMD		"bootcmd=run bootcmd_ubi\0"
 #else
 	#undef BOOTCMD_FROM_NAND
 	#define BOOTCMD_FROM_NAND ""
-	#define CONFIG_BOOTCMD		"bootcmd=run bootcmd_mmc\0"
+	#define ENG_CONFIG_BOOTCMD		"bootcmd=run bootcmd_mmc\0"
 #endif
 
 #define CONFIG_SYS_MMC_ENV_PART		0	/* user area */
@@ -93,9 +90,9 @@
 	"nfsroot=/nfs_icore\0"			\
 	BOOTCMD_FROM_NAND			\
 	BOOTCMD_FROM_MMC			\
-	CONFIG_BOOTCMD				\
+	ENG_CONFIG_BOOTCMD				\
 	"loadfdt=fatload mmc ${mmcdev}:${mmcpart} ${fdt_addr} ${fdt_file}\0"											\
-	"bootargs_base=setenv bootargs_tmp console=" CONFIG_CONSOLE_DEV ",115200" EXTRA_OPTION_SOLO "loglevel=15\0"						\
+	"bootargs_base=setenv bootargs_tmp console=" ENG_CONFIG_CONSOLE_DEV ",115200" EXTRA_OPTION_SOLO "loglevel=15\0"						\
 	"bootargs_net=run bootargs_base; setenv bootargs ${bootargs_tmp} ${mtdparts} root=/dev/nfs ip=dhcp nfsroot=${serverip}:${nfsroot},v3,tcp\0" 		\
 	"bootcmd_net="  YOCTO_BOOTCMD_NET "\0"															\
 	"mmcpart=1\0"																		\
@@ -126,7 +123,6 @@
 
 /* USB Configs */
 #ifdef CONFIG_CMD_USB
-#define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_MX6
 #define CONFIG_USB_STORAGE
 #define CONFIG_EHCI_HCD_INIT_AFTER_RESET
@@ -158,11 +154,6 @@
 #define CONFIG_SYS_MAX_NAND_DEVICE	1
 #define CONFIG_SYS_NAND_BASE		0x40000000
 
-/* FLASH and environment organization */
-#define CONFIG_SYS_NO_FLASH
-#ifndef CONFIG_SYS_NOSMP
-#define CONFIG_SYS_NOSMP
-#endif
 
 #undef CONFIG_ENV_OFFSET
 
