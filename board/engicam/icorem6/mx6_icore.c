@@ -894,6 +894,8 @@ int board_eth_init(struct bd_info *bis)
 	/* set gpr1[ENET_CLK_SEL] */
 	reg = readl(&iomux->gpr[1]);
 
+	gpio_request(EDIMM_VERSION, "EDIMM Module");
+	gpio_direction_input(EDIMM_VERSION);
 	if(gpio_get_value(EDIMM_VERSION))
 		reg &= ~(IOMUXC_GPR1_ENET_CLK_SEL_MASK);	/* EDIMM standard */
 	else
@@ -906,6 +908,7 @@ int board_eth_init(struct bd_info *bis)
 
 	enable_enet_clock();
 
+	gpio_request(ENET_PHY_RST, "ENET_PHY_RST");
 	gpio_direction_output(ENET_PHY_RST, 0);
 	udelay(10000);
 	gpio_set_value(ENET_PHY_RST, 1);
@@ -958,6 +961,8 @@ int board_init(void)
 	setup_sata();
 #endif
 
+	gpio_request(EDIMM_VERSION, "EDIMM Module");
+	gpio_direction_input(EDIMM_VERSION);
 	if(gpio_get_value(EDIMM_VERSION))
 		printf("EDIMM standard 1.0 version\n");
 	else

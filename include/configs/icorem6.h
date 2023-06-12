@@ -12,10 +12,14 @@
 #include <asm/arch/imx-regs.h>
 #include "mx6_common.h"
 
-#ifdef CONFIG_MX6SOLO
+#ifdef CONFIG_MX6S
 #define MAX_SDRAM_SIZE		0x40000000  /* Maximum 1GB for i.Core M6S */
+#define EXTRA_OPTION_SOLO	" cma=96MB "
+#define FDT_ADDR		"fdt_addr=0x14000000"
 #else
 #define MAX_SDRAM_SIZE		0x80000000  /* Maximum 2GB for i.Core M6DL/D/Q */
+#define EXTRA_OPTION_SOLO 	" cma=256MB "
+#define FDT_ADDR		"fdt_addr=0x18000000"
 #endif
 
 #define CONFIG_DISPLAY_CPUINFO
@@ -75,7 +79,6 @@
 
 #define CONFIG_SYS_MMC_ENV_PART		0	/* user area */
 
-#define EXTRA_OPTION_SOLO	 " cma=256MB "
 #define BOOTCMD_MMC_YOCTO	 "run loadfdt; fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} zImage; bootz ${loadaddr} - ${fdt_addr}"
 #define YOCTO_BOOTCMD_MMC_ICORE	 "setenv mmcdev 0; run bootargs_mmc; " BOOTCMD_MMC_YOCTO
 #define YOCTO_BOOTCMD_NET	 "run bootargs_net; tftp zImage; tftp ${fdt_addr} zImage.dtb; bootz ${loadaddr} - ${fdt_addr}"
@@ -107,7 +110,7 @@
 	"bootcmd_mmc="  YOCTO_BOOTCMD_MMC_ICORE "\0"											\
 	"video_type=mxcfb0:dev=lcd\0"													\
 	"fdt_file=" CONFIG_DEFAULT_FDT_FILE "\0" 											\
-	"fdt_addr=0x18000000\0" 													\
+	FDT_ADDR "\0" 													\
 
 #include "icorem6_common.h"
 

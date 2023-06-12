@@ -10,7 +10,7 @@
 #include "imx6qdl-icore.dtsi"
 
 / {
-	model = "Engicam i.CoreM6 DualLite Edimm 2.0 Starter Kit";
+	model = "Engicam i.CoreM6 Solo/DualLite Edimm 2.0 Starter Kit";
 	compatible = "engicam,imx6-icore", "fsl,imx6dl";
 };
 
@@ -39,22 +39,6 @@
 	bus-width = <1>;
 };
 
-&fec {
-	phy-handle = <&eth_phy>;
-
-	mdio {
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		eth_phy: ethernet-phy@0 {
-			compatible = "ethernet-phy-ieee802.3-c22";
-			reg = <0>;
-			reset-gpios = <&gpio7 12 GPIO_ACTIVE_LOW>;
-			reset-assert-us = <4000>;
-			reset-deassert-us = <4000>;
-		};
-	};
-};
 
 &iomuxc {
 	pinctrl_usdhc1: usdhc1grp {
