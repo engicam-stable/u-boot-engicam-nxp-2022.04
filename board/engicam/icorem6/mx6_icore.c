@@ -319,6 +319,7 @@ int board_mmc_getcd(struct mmc *mmc)
 
 	switch (cfg->esdhc_base) {
 	case USDHC1_BASE_ADDR:
+		gpio_request(USDHC1_CD_GPIO, "usdhc1 cd");
 		gpio_direction_input(USDHC1_CD_GPIO);
 		ret = !gpio_get_value(USDHC1_CD_GPIO);
 		break;
@@ -766,7 +767,9 @@ iomux_v3_cfg_t const backlight_pads[] = {
 
 void board_set_backlight (int status)
 {
+	gpio_request(RGB_BACKLIGHT_GP, "RGB_BACKLIGHT_GP");
 	gpio_direction_output(RGB_BACKLIGHT_GP,   status);
+	gpio_request(RGB_BACKLIGHT_REVB, "RGB_BACKLIGHT_REVB");
 	gpio_direction_output(RGB_BACKLIGHT_REVB, status);
 }
 

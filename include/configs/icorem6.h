@@ -52,28 +52,48 @@
 	#define CONFIG_DEFAULT_FDT_FILE	"imx6dl-icore-edimm-v2.dtb"
 #endif
 
-#define CONFIG_SYS_FSL_USDHC_NUM	1
-#define CONFIG_MMCROOT			"/dev/mmcblk0p2"
+#ifndef CONFIG_SYS_BOOT_EMMC
+	#define CONFIG_SYS_FSL_USDHC_NUM	1
+	//#define CONFIG_SYS_MMC_ENV_DEV		0   /* USDHC1 */
+	#define CONFIG_STR_MMC_DEV "0"
+	#define CONFIG_MMCROOT			"/dev/mmcblk0p2"
+#else  /* EMMC */
+	#define CONFIG_SYS_FSL_USDHC_NUM	2
+	#undef CONFIG_SYS_USE_NAND
+	#define CONFIG_ENV_IS_IN_MMC
+	#define CONFIG_SYS_MMC_ENV_DEV	2  /* USDHC3 */
+	#define CONFIG_STR_MMC_DEV "2"
+	#define CONFIG_MMCROOT			"/dev/mmcblk2p2"
+#endif
 
 /* NETWORK SETTINGS */
 #define CONFIG_SERVERIP		192.168.2.96
 #define CONFIG_IPADDR		192.168.2.75
 #define CONFIG_NETMASK		255.255.255.0
 
-#define BOOTCMD_FROM_MMC \
+#define BOOTCMD_FROM_EMMC \
   "bootargs_emmc=run bootargs_base; setenv bootargs ${bootargs_tmp} root=/dev/mmcblk${mmcdev}p2 rootwait rw\0" \
-	"bootcmd_emmc=setenv mmcdev 1; run bootargs_emmc; run loadfdt; fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} zImage; bootz ${loadaddr} - ${fdt_addr}\0"
+	"bootcmd_emmc=setenv mmcdev 2; run bootargs_emmc; run loadfdt; fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} zImage; bootz ${loadaddr} - ${fdt_addr}\0"
+#define BOOTCMD_FROM_SD \
+  "bootargs_mmc=run bootargs_base; setenv bootargs ${bootargs_tmp} root=/dev/mmcblk${mmcdev}p2 rootwait rw\0" \
+	"bootcmd_mmc=setenv mmcdev 0; run bootargs_emmc; run loadfdt; fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} zImage; bootz ${loadaddr} - ${fdt_addr}\0"
 #define BOOTCMD_FROM_NAND \
 	"bootargs_ubi=run bootargs_base; setenv bootargs ${bootargs_tmp} ${mtdparts} ubi.mtd=3 root=ubi0:rootfs rootfstype=ubifs\0"	\
 	"bootcmd_ubi=run bootargs_ubi;nand read ${loadaddr} 0x400000 0x900000;nand read ${fdt_addr} 0xd00000 0x100000;bootz ${loadaddr} - ${fdt_addr} \0"
 
-#if defined(CONFIG_NAND_BOOT)
-	#undef BOOTCMD_FROM_MMC
-	#define BOOTCMD_FROM_MMC ""
-	#define ENG_CONFIG_BOOTCMD		"bootcmd=run bootcmd_ubi\0"
-#else
+#ifdef CONFIG_SYS_BOOT_NAND
+	#undef BOOTCMD_FROM_EMMC
+	#define BOOTCMD_FROM_EMMC ""
+#else /* For NAND & SDCARD */
 	#undef BOOTCMD_FROM_NAND
 	#define BOOTCMD_FROM_NAND ""
+#endif
+
+#if defined(CONFIG_SYS_BOOT_NAND)
+	#define ENG_CONFIG_BOOTCMD		"bootcmd=run bootcmd_ubi\0"
+#elif defined(CONFIG_SYS_BOOT_EMMC)
+	#define ENG_CONFIG_BOOTCMD		"bootcmd=run bootcmd_emmc\0"
+#elif defined(CONFIG_SYS_BOOT_SD)
 	#define ENG_CONFIG_BOOTCMD		"bootcmd=run bootcmd_mmc\0"
 #endif
 
@@ -89,13 +109,13 @@
 #define COMMON_PARAMETER 			\
 	"netdev=eth0\0" 			\
 	"ethprime=FEC0\0" 			\
-	"panel=Amp-WD\0" 			\
 	"nfsroot=/nfs_icore\0"			\
 	BOOTCMD_FROM_NAND			\
-	BOOTCMD_FROM_MMC			\
+	BOOTCMD_FROM_SD			\
+	BOOTCMD_FROM_EMMC			\
 	ENG_CONFIG_BOOTCMD				\
 	"loadfdt=fatload mmc ${mmcdev}:${mmcpart} ${fdt_addr} ${fdt_file}\0"											\
-	"bootargs_base=setenv bootargs_tmp console=" ENG_CONFIG_CONSOLE_DEV ",115200" EXTRA_OPTION_SOLO "loglevel=15\0"						\
+	"bootargs_base=setenv bootargs_tmp console=" ENG_CONFIG_CONSOLE_DEV ",115200" EXTRA_OPTION_SOLO "\0"						\
 	"bootargs_net=run bootargs_base; setenv bootargs ${bootargs_tmp} ${mtdparts} root=/dev/nfs ip=dhcp nfsroot=${serverip}:${nfsroot},v3,tcp\0" 		\
 	"bootcmd_net="  YOCTO_BOOTCMD_NET "\0"															\
 	"mmcpart=1\0"																		\
@@ -108,7 +128,6 @@
 	"bootargs_mmc=run bootargs_base; setenv bootargs ${bootargs_tmp} ${mtdparts} root=/dev/mmcblk0p2 rootwait rw\0" 		\
 	"mtdparts=mtdparts=gpmi-nand:4m(boot),9m(kernel),1m(dtb),-(rootfs)\0"								\
 	"bootcmd_mmc="  YOCTO_BOOTCMD_MMC_ICORE "\0"											\
-	"video_type=mxcfb0:dev=lcd\0"													\
 	"fdt_file=" CONFIG_DEFAULT_FDT_FILE "\0" 											\
 	FDT_ADDR "\0" 													\
 
@@ -160,7 +179,7 @@
 
 #undef CONFIG_ENV_OFFSET
 
-#if defined(CONFIG_ENV_IS_IN_MMC)
+#ifndef CONFIG_SYS_BOOT_NAND
 #define CONFIG_ENV_OFFSET		(16 * 64 * 1024)
 #elif defined(CONFIG_ENV_IS_IN_SPI_FLASH)
 #define CONFIG_ENV_OFFSET		(768 * 1024)
