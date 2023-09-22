@@ -497,6 +497,19 @@ config TARGET_MX6SXSABRESD
 	select ARCH_MISC_INIT
 	select RNG_SELF_TEST
 
+config TARGET_MX6SXSMARCORE
+	bool "mx6sxsmarcore"
+	depends on MX6SX
+	select BOARD_EARLY_INIT_F
+	select BOARD_LATE_INIT
+	select DM
+	select DM_THERMAL
+	select SUPPORT_SPL
+	select FSL_CAAM
+	select FSL_BLOB
+	select ARCH_MISC_INIT
+	select RNG_SELF_TEST
+
 config TARGET_MX6SXSABREAUTO
 	bool "mx6sxsabreauto"
 	depends on MX6SX
@@ -866,6 +879,7 @@ source "board/engicam/imx6q/Kconfig"
 source "board/engicam/imx6ul/Kconfig"
 source "board/engicam/microgea-mx6ull/Kconfig"
 source "board/engicam/icorem6/Kconfig"
+source "board/engicam/mx6sxsmarcore/Kconfig"
 source "board/freescale/mx6memcal/Kconfig"
 source "board/freescale/mx6sabreauto/Kconfig"
 source "board/freescale/mx6sabresd/Kconfig"

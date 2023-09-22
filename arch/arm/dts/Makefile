@@ -845,6 +845,7 @@ dtb-$(CONFIG_MX6SX) += \
 	imx6sx-sabreauto.dtb \
 	imx6sx-sdb.dtb \
 	imx6sx-sdb-emmc.dtb \
+	imx6sx-smarcore.dtb \
 	imx6sx-softing-vining-2000.dtb \
 	imx6sx-udoo-neo-basic.dtb \
 	imx6sx-udoo-neo-extended.dtb \

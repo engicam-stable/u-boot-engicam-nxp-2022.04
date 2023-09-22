@@ -1234,7 +1234,11 @@ int fecmxc_initialize_multi(struct bd_info *bd, int dev_id, int phy_id,
 	 */
 	base_mii = CONFIG_FEC_MXC_MDIO_BASE;
 #else
+#ifdef CONFIG_TARGET_MX6SXSMARCORE
+	base_mii = ENET2_BASE_ADDR;
+#else
 	base_mii = addr;
+#endif
 #endif
 	init_clk_fec(dev_id);
 	debug("eth_init: fec_probe(bd, %i, %i) @ %08x\n", dev_id, phy_id, addr);
