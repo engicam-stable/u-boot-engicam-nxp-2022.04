@@ -311,6 +311,20 @@ int board_phy_config(struct phy_device *phydev)
 #define DISPMIX				13
 #define MIPI				15
 
+#ifdef CONFIG_TARGET_IMX8MP_ICORE_2E
+static iomux_v3_cfg_t const lcd_pwr_en_pads[] = {
+	MX8MP_PAD_I2C1_SCL__GPIO5_IO14 | MUX_PAD_CTRL(0x1D1),
+};
+
+#define LCD_PWR_EN IMX_GPIO_NR(5, 14)
+void lcd_pwr_en(void)
+{
+	imx_iomux_v3_setup_multiple_pads(lcd_pwr_en_pads, ARRAY_SIZE(lcd_pwr_en_pads));
+	gpio_request(LCD_PWR_EN, "lcd_pwr_en");
+	gpio_direction_output(IMX_GPIO_NR(5,14), 1);
+}
+#endif
+
 int board_init(void)
 {
 	struct arm_smccc_res res;
@@ -326,6 +340,9 @@ int board_init(void)
 	
 	reset_eqos();
 
+#ifdef CONFIG_TARGET_IMX8MP_ICORE_2E
+	lcd_pwr_en();
+#endif
 
 #ifdef CONFIG_NAND_MXS
 	setup_gpmi_nand();

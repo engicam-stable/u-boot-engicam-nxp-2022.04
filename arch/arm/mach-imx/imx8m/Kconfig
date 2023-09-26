@@ -251,6 +251,16 @@ config TARGET_IMX8MP_ICORE
 	select ARCH_MISC_INIT
 	select SPL_CRYPTO if SPL
 
+config TARGET_IMX8MP_ICORE_2E
+	bool "imx8mp icore 2e SOM"
+	select IMX8MP
+	select SUPPORT_SPL
+	select IMX8M_LPDDR4
+	select FSL_CAAM
+	select FSL_BLOB
+	select ARCH_MISC_INIT
+	select SPL_CRYPTO if SPL
+
 config TARGET_IMX8MP_ICORE_FASTETH
 	bool "imx8mp iCore FastEthernet Engicam module"
 	select IMX8MP
