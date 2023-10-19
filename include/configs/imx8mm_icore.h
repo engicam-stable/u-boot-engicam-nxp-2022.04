@@ -141,6 +141,10 @@
 #define PHYS_SDRAM			0x40000000
 #ifdef CONFIG_IMX8M_2GB_LPDDR4
   #define PHYS_SDRAM_SIZE			0x80000000 /* 2GB DDR total */
+#elif defined(CONFIG_IMX8M_4GB_LPDDR4)
+  #define PHYS_SDRAM_SIZE		0xC0000000	/* 3 GB */
+  #define PHYS_SDRAM_2		0x100000000
+  #define PHYS_SDRAM_2_SIZE	0x40000000	/* 1 GB */
 #else
 /* Configuration for 1GB default DDR4 size */
   #define PHYS_SDRAM_SIZE			0x40000000 /* 1GB DDR */
