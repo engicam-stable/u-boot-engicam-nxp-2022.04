@@ -1,0 +1,6 @@
+MX6SXICORE BOARD
+M:	Support <support@engicam.com>
+S:	Maintained
+F:	board/engicam/mx6sxsabresd/
+F:	include/configs/mx6sxicore.h
+F:	configs/mx6sxicore_defconfig

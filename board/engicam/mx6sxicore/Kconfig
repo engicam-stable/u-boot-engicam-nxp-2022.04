@@ -1,0 +1,17 @@
+if TARGET_MX6SXICORE
+
+config SYS_BOARD
+	default "mx6sxicore"
+
+config SYS_VENDOR
+	default "engicam"
+
+config SYS_CONFIG_NAME
+	default "mx6sxicore"
+
+config IMX_CONFIG
+	default "board/engicam/mx6sxicore/imximage.cfg"
+
+config SYS_TEXT_BASE
+	default 0x87800000
+endif
