@@ -474,18 +474,72 @@ int board_ehci_hcd_init(int port)
 #endif
 #endif
 
+#define MICREL_KSZ9021_EXTREG_CTRL	0xB
+#define MICREL_KSZ9021_EXTREG_DATA_WRITE	0xC
+#define MICREL_KSZ9021_RGMII_CLK_CTRL_PAD_SCEW	0x104
+#define MICREL_KSZ9021_RGMII_RX_DATA_PAD_SCEW	0x105
+
+void ksz9021rn_phy_fixup(struct phy_device *phydev)
+{
+  printf("ksz9021rn_phy_fixup\n");
+  phy_write(phydev, MDIO_DEVAD_NONE, MICREL_KSZ9021_EXTREG_CTRL, 0x8000 | MICREL_KSZ9021_RGMII_RX_DATA_PAD_SCEW);
+  phy_write(phydev, MDIO_DEVAD_NONE, MICREL_KSZ9021_EXTREG_DATA_WRITE, 0x0000);
+
+  phy_write(phydev, MDIO_DEVAD_NONE, MICREL_KSZ9021_EXTREG_CTRL, 0x8000 | MICREL_KSZ9021_RGMII_CLK_CTRL_PAD_SCEW);
+  phy_write(phydev, MDIO_DEVAD_NONE, MICREL_KSZ9021_EXTREG_DATA_WRITE, 0xf0f0);
+
+  phy_write(phydev, MDIO_DEVAD_NONE, MICREL_KSZ9021_EXTREG_CTRL, 0x8000 | 0x106);
+  phy_write(phydev, MDIO_DEVAD_NONE, MICREL_KSZ9021_EXTREG_DATA_WRITE, 0x0000);
+}
+
+static void mmd_write_reg(struct phy_device *dev, int device, int reg, int val)
+{
+	phy_write(dev, MDIO_DEVAD_NONE, 0x0d, device);
+	phy_write(dev, MDIO_DEVAD_NONE, 0x0e, reg);
+	phy_write(dev, MDIO_DEVAD_NONE, 0x0d, (1 << 14) | device);
+	phy_write(dev, MDIO_DEVAD_NONE, 0x0e, val);
+}
+
+static int ksz9031rn_phy_fixup(struct phy_device *phydev)
+{
+	printf("ksz9031rn_phy_fixup\n");
+
+	//write register 6 addr 2 TXD[0:3] skew
+	mmd_write_reg(phydev, 2, 6, 0x4111);
+
+	//write register 5 addr 2 RXD[0:3] skew
+	mmd_write_reg(phydev, 2, 5, 0x47a7);
+
+	//write register 4 addr 2 RX_DV TX_EN skew
+	mmd_write_reg(phydev, 2, 4, 0x004A);
+
+	//write register 8 addr 2 RX_CLK GTX_CLK skew
+	mmd_write_reg(phydev, 2, 8, 0x0273);
+
+	return 0;
+}
+
 int board_phy_config(struct phy_device *phydev)
 {
-	/*
-	 * Enable 1.8V(SEL_1P5_1P8_POS_REG) on
-	 * Phy control debug reg 0
-	 */
-	phy_write(phydev, MDIO_DEVAD_NONE, 0x1d, 0x1f);
-	phy_write(phydev, MDIO_DEVAD_NONE, 0x1e, 0x8);
+  unsigned short tmp1 = 0;
+  unsigned short tmp2 = 0;
 
-	/* rgmii tx clock delay enable */
-	phy_write(phydev, MDIO_DEVAD_NONE, 0x1d, 0x05);
-	phy_write(phydev, MDIO_DEVAD_NONE, 0x1e, 0x100);
+	if (miiphy_read("FEC0", CONFIG_FEC_MXC_PHYADDR, MII_PHYSID2, &tmp2) != 0) {
+		debug("PHY ID register 3 read failed\n");
+	}
+	if (miiphy_read("FEC0", CONFIG_FEC_MXC_PHYADDR, MII_PHYSID1, &tmp1) != 0) {
+		debug("PHY ID register 2 read failed\n");
+	}
+
+	unsigned short model = (tmp2>>4) & 0x3F;
+	if (model == 0x21) // KSZ9021
+	{
+		ksz9021rn_phy_fixup(phydev);
+	}
+	else if (model == 0x22) // KSZ9031
+	{
+		ksz9031rn_phy_fixup(phydev);
+	}
 
 	if (phydev->drv->config)
 		phydev->drv->config(phydev);
