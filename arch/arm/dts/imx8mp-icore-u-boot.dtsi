@@ -181,6 +181,7 @@
 	u-boot,dm-spl;
 };
 
+#ifdef CONFIG_TARGET_IMX8MP_ICORE_2E
 &i2c6 {
 	u-boot,dm-spl;
 };
@@ -192,6 +193,7 @@
 &pinctrl_i2c6_gpio {
 	u-boot,dm-spl;
 };
+#endif
 
 &usdhc2 {
 	u-boot,dm-spl;
