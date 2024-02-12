@@ -46,12 +46,6 @@
 
 #define SHOW_ENGICAM_NOTE        "Note:    iCoreM6 default U-Boot\n"
 
-#if defined(CONFIG_MX6Q)
-	#define CONFIG_DEFAULT_FDT_FILE	"imx6q-icore-edimm-v2.dtb"
-#elif defined(CONFIG_MX6DL) || defined(CONFIG_MX6SOLO)
-	#define CONFIG_DEFAULT_FDT_FILE	"imx6dl-icore-edimm-v2.dtb"
-#endif
-
 #ifndef CONFIG_SYS_BOOT_EMMC
 	#define CONFIG_SYS_FSL_USDHC_NUM	1
 	//#define CONFIG_SYS_MMC_ENV_DEV		0   /* USDHC1 */
