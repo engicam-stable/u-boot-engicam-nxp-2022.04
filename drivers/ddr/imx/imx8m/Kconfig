@@ -12,7 +12,7 @@ config IMX8M_2GB_LPDDR4
 	bool "imx8m 2GB LPDDR4"
 
 config IMX8M_4GB_LPDDR4
-	bool "imx8m 2GB LPDDR4"
+	bool "imx8m 4GB LPDDR4"
 
 config IMX8M_LPDDR4
 	bool "imx8m lpddr4"
