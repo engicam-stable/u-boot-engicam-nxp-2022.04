@@ -58,7 +58,26 @@ int spl_board_boot_device(enum boot_device boot_dev_spl)
 
 void spl_dram_init(void)
 {
-	ddr_init(&dram_timing);
+#ifdef CONFIG_IMX8MP_4GB_LPDDR4
+	/*
+	 * Two Micron 4GB variants differ only in MR8.
+	 * Init with the primary timing, then verify via MR8 and
+	 * re-init with the alternate timing if needed.
+	 */
+	extern struct dram_timing_info dram_timing_4gb_single_ch_die;
+	/* TODO: replace with the actual MR8 value of the new RAM variant */
+#define MR8_4GB_SINGLE_CH_DIE  0x18
+#define MR8_4GB_DUAL_CH_DIE  0x10
+	unsigned int mr8;
+
+	ddr_init(&dram_timing_4gb_single_ch_die);
+	mr8 = lpddr4_mr_read(1, 8);
+	printf("LPDDR4 MR8=0x%02x\n", mr8);
+	if (mr8 == MR8_4GB_DUAL_CH_DIE) {
+		printf("LPDDR4: new variant detected (MR8=0x%02x), re-init\n", mr8);
+		ddr_init(&dram_timing);
+	}
+	#endif
 }
 
 void spl_board_init(void)
