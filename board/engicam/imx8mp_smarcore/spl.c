@@ -77,7 +77,9 @@ void spl_dram_init(void)
 		printf("LPDDR4: new variant detected (MR8=0x%02x), re-init\n", mr8);
 		ddr_init(&dram_timing);
 	}
-	#endif
+#else
+	ddr_init(&dram_timing);
+#endif
 }
 
 void spl_board_init(void)
