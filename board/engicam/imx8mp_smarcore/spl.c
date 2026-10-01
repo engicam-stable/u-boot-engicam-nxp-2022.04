@@ -74,7 +74,6 @@ void spl_dram_init(void)
 	mr8 = lpddr4_mr_read(1, 8);
 	printf("LPDDR4 MR8=0x%02x\n", mr8);
 	if (mr8 == MR8_4GB_DUAL_CH_DIE) {
-		printf("LPDDR4: new variant detected (MR8=0x%02x), re-init\n", mr8);
 		ddr_init(&dram_timing);
 	}
 #else
